@@ -300,7 +300,7 @@ int quickSort(int *a, int n) // 퀵 정렬 실시 함수
 			a[i] = a[j]; // pivot보다 작은 값은 왼쪽 부분집합으로 이동
 			a[j] = t; // pivot보다 큰 값은 오른쪽 부분집합으로 이동
 		}
-		t = a[i]; // (퀵정렬 마무리) a[i]와 a[n-1] 요소값에 대한 swap 실시
+		t = a[i]; // (퀵정렬 마무리) a[i]와 a[n-1](pivot) 요소값에 대한 swap 실시
 		a[i] = a[n-1];
 		a[n-1] = t;
 
@@ -313,23 +313,23 @@ int quickSort(int *a, int n) // 퀵 정렬 실시 함수
 }
 
 int hashCode(int key) {
-   return key % MAX_HASH_TABLE_SIZE;
+   return key % MAX_HASH_TABLE_SIZE; // hash code 값을 구하여 return함
 }
 
-int hashing(int *a, int **ht)
+int hashing(int *a, int **ht) // 해싱을 실시하는 함수, 매개변수로 array 주소와 hashtable에 대한 이중 포인터 받음
 {
-	int *hashtable = NULL;
+	int *hashtable = NULL; // hashtable 포인터를 선언하여 NULL로 초기화
 
 	/* hash table이 NULL인 경우 메모리 할당 */
-	if(*ht == NULL) {
-		hashtable = (int*)malloc(sizeof(int) * MAX_ARRAY_SIZE);
+	if(*ht == NULL) { // *ht가 NULL일 경우, 즉 hash table에 대한 공간 할당이 되지 않은 경우
+		hashtable = (int*)malloc(sizeof(int) * MAX_ARRAY_SIZE); // 동적 할당을 통해 array size와 동일하게 hash table에 공간 할당
 		*ht = hashtable;  /* 할당된 메모리의 주소를 복사 --> main에서 배열을 control 할수 있도록 함*/
 	} else {
 		hashtable = *ht;	/* hash table이 NULL이 아닌경우, table 재활용, reset to -1 */
 	}
 
 	for(int i = 0; i < MAX_HASH_TABLE_SIZE; i++)
-		hashtable[i] = -1;
+		hashtable[i] = -1; // 모든 hash table 요소에 대해 0으로 초기화
 
 	/*
 	for(int i = 0; i < MAX_HASH_TABLE_SIZE; i++)
@@ -338,29 +338,29 @@ int hashing(int *a, int **ht)
 
 	int key = -1;
 	int hashcode = -1;
-	int index = -1;
-	for (int i = 0; i < MAX_ARRAY_SIZE; i++)
+	int index = -1; // key, hashcode, index 변수롤 선언하여 -1로 초기화
+	for (int i = 0; i < MAX_ARRAY_SIZE; i++) // 모든 array 요소에 대해 오름차순을 반복
 	{
-		key = a[i];
-		hashcode = hashCode(key);
+		key = a[i]; // key에 array의 i번째 요소값 대입
+		hashcode = hashCode(key); // 해당 key값에 대한 hash code 생성하여 대입
 		/*
 		printf("key = %d, hashcode = %d, hashtable[%d]=%d\n", key, hashcode, hashcode, hashtable[hashcode]);
 		*/
-		if (hashtable[hashcode] == -1)
+		if (hashtable[hashcode] == -1) // hashtable의 hashcode index 요소값이 -1인 경우, 즉 해당 index가 비었을 경우
 		{
-			hashtable[hashcode] = key;
-		} else 	{
+			hashtable[hashcode] = key; // 해당 index에 key값 대입
+		} else 	{ // 해당 index가 비지 않았을 경우
+ 
+			index = hashcode; // index에 hashcode 값 대입
 
-			index = hashcode;
-
-			while(hashtable[index] != -1)
+			while(hashtable[index] != -1) // hashtable의 index 변수에 대한 공간이 비지 않았을 때 계속 반복
 			{
-				index = (++index) % MAX_HASH_TABLE_SIZE;
+				index = (++index) % MAX_HASH_TABLE_SIZE; // index에 (index+1)값을 hash table 크기만큼 나눈 나머지 값 대입(빈 index 찾음)
 				/*
 				printf("index = %d\n", index);
 				*/
 			}
-			hashtable[index] = key;
+			hashtable[index] = key; // 빈 공간을 찾은 경우 해당 hashtable의index번째 요소값에 key 대입
 		}
 	}
 
@@ -369,14 +369,14 @@ int hashing(int *a, int **ht)
 
 int search(int *ht, int key)
 {
-	int index = hashCode(key);
+	int index = hashCode(key); // index 변수 선언하여 사용자가 검색하고자 하는 key값에 대한 hashcode 대입
 
-	if(ht[index] == key)
-		return index;
+	if(ht[index] == key) // ht에서 hashcode를 통해 찾은 값이 key값과 동일한 경우
+		return index; // 해당 index 반환
 
-	while(ht[++index] != key)
+	while(ht[++index] != key) //동일하지 않은 경우 ht의 index+1번째 요소값과 key값이 같을 때까지 반복
 	{
-		index = index % MAX_HASH_TABLE_SIZE;
+		index = index % MAX_HASH_TABLE_SIZE; // index에 index를 hash table 크기만큼 나눈 나머지값 대입
 	}
-	return index;
+	return index; // 조건을 만족하는 index 찾은 경우 반환
 }
