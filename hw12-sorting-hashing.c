@@ -111,7 +111,7 @@ int main()
 			printArray(array); // array에 대한 출력 실시
 			break;
 		default:
-			printf("\n       >>>>>   Concentration!!   <<<<<     \n");
+			printf("\n       >>>>>   Concentration!!   <<<<<     \n"); // 잘못된 메뉴값 선택하였을 경우 오류 메시지 출력
 			break;
 		}
 
@@ -192,120 +192,120 @@ int selectionSort(int *a) // 선택정렬 실시 함수
 	return 0;
 }
 
-int insertionSort(int *a)
+int insertionSort(int *a) // 삽입 정렬 실시 함수
 {
-	int i, j, t;
+	int i, j, t; // 삽입정렬을 실시하기 위해 필요한 변수 i, j, t 선언
 
 	printf("Insertion Sort: \n");
 	printf("----------------------------------------------------------------\n");
 
-	printArray(a);
+	printArray(a); // 기존 array 출력
 
-	for(i = 1; i < MAX_ARRAY_SIZE; i++)
+	for(i = 1; i < MAX_ARRAY_SIZE; i++) // 2번째 index 요소값부터 마지막 요소까지 반복
 	{
-		t = a[i];
-		j = i;
-		while (a[j-1] > t && j > 0)
+		t = a[i]; // t에 i번째 요소값인 a[i] 대입
+		j = i; // j에 index값인 i 대입
+		while (a[j-1] > t && j > 0) // array의 i 이전 요소부터 맨 앞 요소까지 반복 (j를 통해), a[j-1]이 i번째 요소값보다 큰 경우
 		{
-			a[j] = a[j-1];
-			j--;
-		}
-		a[j] = t;
+			a[j] = a[j-1]; // 요소값을 기존 index에서 +1만큼 array에서 오른쪽으로 미룸
+			j--; // 왼쪽 요소에도 적용하기 위해 j--
+		} // t값이 들어갈 알맞은 index인 j 찾음
+		a[j] = t; // a[j]에 t값 대입하여 새로운 sorted subset 완성
 	}
 
 	printf("----------------------------------------------------------------\n");
-	printArray(a);
+	printArray(a); // 삽입정렬이 완료된 array 출력
 
 	return 0;
 }
 
-int bubbleSort(int *a)
+int bubbleSort(int *a) // 버블 정렬 실시 함수
 {
-	int i, j, t;
+	int i, j, t; // 버블정렬을 실시하기 위해 필요한 변수 i, j, t 선언
 
 	printf("Bubble Sort: \n");
 	printf("----------------------------------------------------------------\n");
 
-	printArray(a);
+	printArray(a); // 기존 array 출력
 
-	for(i = 0; i < MAX_ARRAY_SIZE; i++)
+	for(i = 0; i < MAX_ARRAY_SIZE; i++) // 이중 for문을 통해 버블 정렬 실현
 	{
 		for (j = 0; j < MAX_ARRAY_SIZE; j++)
 		{
-			if (a[j-1] > a[j])
+			if (a[j-1] > a[j]) // 각 j에 대해 직전 index의 요소값보다 j번째 index의 요소값이 작은 경우
 			{
-				t = a[j-1];
+				t = a[j-1]; // j-1번째 요소값과 j번째 요소값에 대한 값에 의한 swap 실시
 				a[j-1] = a[j];
 				a[j] = t;
 			}
 		}
-	}
+	} // 이중 for문을 통해 모든 요소에 대해 오름차순 정렬 완료
 
 	printf("----------------------------------------------------------------\n");
-	printArray(a);
+	printArray(a); // 버블정렬이 완료된 array 출력
 
 	return 0;
 }
 
-int shellSort(int *a)
+int shellSort(int *a) // 쉘 정렬 실시 함수
 {
-	int i, j, k, h, v;
+	int i, j, k, h, v; // 쉘 정렬에 필요한 변수인 i, j, k, h, v 선언
 
 	printf("Shell Sort: \n");
 	printf("----------------------------------------------------------------\n");
 
 	printArray(a);
 
-	for (h = MAX_ARRAY_SIZE/2; h > 0; h /= 2)
+	for (h = MAX_ARRAY_SIZE/2; h > 0; h /= 2) // h만큼 간겨의 떨어진 레코드를 삽입 정렬, 초기값 원소 최대개수/2, h가 1이 될 때까지
 	{
-		for (i = 0; i < h; i++)
+		for (i = 0; i < h; i++) // i가 0부터 h가 될 때까지 반복
 		{
-			for(j = i + h; j < MAX_ARRAY_SIZE; j += h)
+			for(j = i + h; j < MAX_ARRAY_SIZE; j += h) // 비교할 index값을 i+h부터 h간격 만큼 증가시켜 최대개수보다 작을 때까지
 			{
-				v = a[j];
-				k = j;
-				while (k > h-1 && a[k-h] > v)
+				v = a[j]; // v에 비교할 index 요소값 대입
+				k = j; // k에 비교할 index값 대입
+				while (k > h-1 && a[k-h] > v) //  h간격 만큼 왼쪽에 있는 a[k-h]가 비교할 a[j]보다 클 때까지, k가 각 부분집합의 첫번째 index값과 같을 때까지 반복
 				{
-					a[k] = a[k-h];
-					k -= h;
-				}
-				a[k] = v;
+					a[k] = a[k-h]; // h 간격만큼 차이나는 왼쪽 index 요소값을 오른쪽으로 당김
+					k -= h; // k값에서 간격인 h만큼 뺌
+				} // v(a[j])값이 들어갈 수 있는 각 부분집합의 index k값 찾음
+				a[k] = v; // array의 k번째 index에 v값 대입하여 쉘 정렬 실시
 			}
 		}
 	}
 	printf("----------------------------------------------------------------\n");
-	printArray(a);
+	printArray(a); // 쉘 정렬이 완료된 array 출력
 
 	return 0;
 }
 
-int quickSort(int *a, int n)
+int quickSort(int *a, int n) // 퀵 정렬 실시 함수
 {
-	int v, t;
-	int i, j;
+	int v, t; // 퀵 정렬 기준이 되는 pivot, 값에 의한 swap위해 값을 임시로 저장할 temp 선언
+	int i, j; // 왼쪽, 오른쪽 부분집합의 index를 지정할 변수 선언
 
-	if (n > 1)
+	if (n > 1) // n>1, 즉 recursive를 통해 더 퀵정렬을 실시해야 할 때
 	{
-		v = a[n-1];
-		i = -1;
-		j = n - 1;
+		v = a[n-1]; // pivot값을 a[n-1]로 설정
+		i = -1; // 왼쪽 부분집합 탐색을 위한 초기 i값을 -1로 설정
+		j = n - 1; // 오른쪽 부분집합 탐색을 위한 초기 i값을 n-1로 설정
 
-		while(1)
+		while(1) // 주어진 조건을 만족할 때까지 반복
 		{
-			while(a[++i] < v);
-			while(a[--j] > v);
+			while(a[++i] < v); // 왼쪽 부분집합에서 pivot값보다 작은 요소 중 가장 큰 index 가지는 a[i] 찾음
+			while(a[--j] > v); // 오른쪽 부분집합에서 pivot값보다 큰 요소 중 가장 작은 index 가지는 a[j] 찾음
 
-			if (i >= j) break;
-			t = a[i];
-			a[i] = a[j];
-			a[j] = t;
+			if (i >= j) break; // i가 j보다 크거나 같을 때, 즉 퀵 정렬 사이클이 마무리되었을 경우 break
+			t = a[i]; // 왼쪽 부분집합에 속한 i번째 요소와 오른쪽 부분집합에 속한 j번째 요소 값에 의한 swap 실시하여 
+			a[i] = a[j]; // pivot보다 작은 값은 왼쪽 부분집합으로 이동
+			a[j] = t; // pivot보다 큰 값은 오른쪽 부분집합으로 이동
 		}
-		t = a[i];
+		t = a[i]; // (퀵정렬 마무리) a[i]와 a[n-1] 요소값에 대한 swap 실시
 		a[i] = a[n-1];
 		a[n-1] = t;
 
-		quickSort(a, i);
-		quickSort(a+i+1, n-i-1);
+		quickSort(a, i); // 왼쪽 부분집합에 대한 퀵 정렬을 recursive로 실행
+		quickSort(a+i+1, n-i-1); // 오른쪽 부분집합에 대한 퀵 정렬을 recursive로 실행
 	}
 
 
